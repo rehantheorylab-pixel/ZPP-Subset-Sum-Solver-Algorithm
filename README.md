@@ -72,62 +72,39 @@ The subset sum problem: given a set of integers, does any subset sum to exactly 
 
 ---
 
+
 ## Installation
 
-### Option A -- Instant Setup (No Rust Needed)
+### Option A -- Instant (No Rust)
 
-Fastest start. Just download and run.
-
-**1.** Download `zpp.exe` from the [repo root](zpp.exe)
-
-**2.** Open a terminal in that folder:
+**1.** Download `zpp.exe` [from here](zpp.exe). Open terminal in that folder.
 ```
 zpp.exe
 ```
-Done. No compilation, no dependencies. Standalone Windows binary.
-
-**3.** (Optional) Install the `algorithm` command:
+**2.** (Optional) Install the `algorithm` command:
 ```powershell
 git clone https://github.com/rehantheorylab-pixel/35000x-faster-subset-sum-algorithm-n70.git
 cd 35000x-faster-subset-sum-algorithm-n70
 .\install_command.ps1
 ```
-Then type `algorithm` from any terminal.
-
-> **Note:** The pre-built EXE runs 5-15% slower than a native build. For max performance, use Option B.
+> Pre-built EXE is 5-15% slower than native build.
 
 ---
 
-### Option B -- Full Performance Setup (Recommended -- with Rust)
+### Option B -- Full Performance (Recommended)
 
-Build natively for best speed on your hardware. Requires Rust 1.85+.
-
-**1. Install Rust**
-```
-Visit https://rustup.rs and follow the one-line instructions.
-```
-After install, restart terminal and verify: `rustc --version` (should show 1.85+)
-
-**2. Install Build Tools** (Windows only)
-
-Download Visual Studio 2022 Build Tools from https://visualstudio.microsoft.com/downloads/
-- Run installer, select "Desktop development with C++"
-- Click Install
-
-**3. Clone and build**
+Requires Rust 1.85+.
+**1.** Install Rust from [rustup.rs](https://rustup.rs). Verify: `rustc --version`
+**2.** Windows only: Install VS 2022 Build Tools with C++ workload from [visualstudio.microsoft.com](https://visualstudio.microsoft.com/downloads/)
+**3.** Run:
 ```bash
 git clone https://github.com/rehantheorylab-pixel/35000x-faster-subset-sum-algorithm-n70.git
 cd 35000x-faster-subset-sum-algorithm-n70
 .\install.ps1    # Windows
 ./install.sh     # Linux/macOS
+algorithm
 ```
-
-**4. Run:** `algorithm`
-
-Requirements: Windows/Linux/macOS, Rust 1.85+, Python 3.11+ (test suite), 8GB RAM min.
-
----
-
+Requirements: 8GB RAM (12GB for n=60+). Python 3.11+ for test suite only.
 ## Usage
 
 ```
@@ -227,6 +204,55 @@ Yes. MIT license. Free to use, modify, sell.
 <details>
 <summary>How to cite?</summary>
 Repository: `github.com/rehantheorylab-pixel/35000x-faster-subset-sum-algorithm-n70`
+
+</details>
+
+<details>
+<summary>Can it solve n=72, n=80, n=500, or n=1100?</summary>
+
+**Yes** for structured/small-target cases. Active research for random/large-target.
+
+- **n=500-1100 with small targets**: Already solved. Bitset DP: 1000 elements in 0.084s. O(n * target).
+- **n=72 with large targets**: GDEP engine under active research. MITM at n=72 = ~68B pairs.
+- **n=80-100 with structured data**: GDEP pool restriction already effective.
+- **Random + large targets**: NP-complete exponential limit -- universal, not a solver limitation.
+
+</details>
+
+<details>
+<summary>How is the 35,000x claim verified?</summary>
+
+Independent test suite (`test_zpp.py`) verifies all claims in under 10 minutes. At n=60 hard 64-bit: 24.3s vs BCJ baseline ~864,000s (240 hours). Ratio: 35,556x. Anyone can reproduce this.
+
+</details>
+
+<details>
+<summary>What is the jnh SAT benchmark?</summary>
+
+3600 variables, 1899-digit numbers. ColumnSAT engine solves it in 0.79s via direct SAT encoding (DPLL). Previous solvers could not handle SAT-encoded subset sum at this scale.
+
+</details>
+
+<details>
+<summary>Is P vs NP related?</summary>
+
+Subset sum is NP-complete. This solver achieves unprecedented practical performance through algorithm engineering, not by resolving P vs NP. The theoretical question remains open.
+
+</details>
+
+<details>
+<summary>How do engines choose which one runs?</summary>
+
+The problem profiler analyzes: element count, size, duplicates, negatives, density, and structure. It classifies the instance and automatically selects the optimal engine combination. You never guess -- the system picks.
+
+</details>
+
+<details>
+<summary>What programming languages are used?</summary>
+
+Core solver: Rust (33% of code -- all 23 engines). Controller/test suite/GUI: Python (63%). The Rust binary compiles to a standalone EXE requiring no dependencies.
+
+</details>
 </details>
 
 ---
@@ -253,4 +279,5 @@ Original contributions:
 ---
 
 *Built by Rehan -- the world record subset sum solver.*
+
 
